@@ -24,8 +24,6 @@ function randomPort() {
 }
 
 function read_mac_address() {
-  // var reader = new FileReader();
-  // let mac = reader.readAsText('/home/adrian/config/media_server_mac', 'UTF-8');
   return 'f0:de:f1:bc:54:14';
 }
 
@@ -77,6 +75,7 @@ export default function App() {
   const [mediaServerStatus, setMediaServerStatus] = useState('off');
 
   pingMediaServer().then((result) => {
+    // result === [] if there are no errors, otherwise [<the error>]
     if (result.length === 0) {
       setMediaServerStatus('on');
     }
