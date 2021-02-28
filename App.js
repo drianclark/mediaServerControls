@@ -37,9 +37,9 @@ function constructMagicPacket() {
     decimal_mac.push(parseInt(hex, 16).toString());
   });
 
-  let ff_bit = new Array(6).fill('255');
-  let mac_bit = new Array(16).fill(decimal_mac).flat();
-  let magicPacket = ff_bit.concat(mac_bit);
+  let ff_part = new Array(6).fill('255');
+  let mac_part = new Array(16).fill(decimal_mac).flat();
+  let magicPacket = ff_part.concat(mac_part);
 
   return magicPacket;
 }
