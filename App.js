@@ -5,15 +5,16 @@ import dgram from 'react-native-udp';
 import SSH from 'react-native-ssh';
 import Config from 'react-native-config';
 
+const SSH_CONFIG = {
+  user: Config.SSH_USER,
+  host: Config.SSH_HOST,
+  password: Config.SSH_PASSWORD,
+};
+
 function pingMediaServer() {
   let command = 'true';
-  let config = {
-    user: Config.SSH_USER,
-    host: Config.SSH_HOST,
-    password: Config.SSH_PASSWORD,
-  };
 
-  return SSH.execute(config, command).then(
+  return SSH.execute(SSH_CONFIG, command).then(
     (result) => result,
     (error) => error,
   );
@@ -71,6 +72,15 @@ function sendMagicPacket() {
   });
 }
 
+function shutdownServer() {
+  let command = `echo ${Config.SSH_PASSWORD} | sudo -S shutdown now`;
+
+  return SSH.execute(SSH_CONFIG, command).then(
+    (result) => result,
+    (error) => error,
+  );
+}
+
 export default function App() {
   const [mediaServerStatus, setMediaServerStatus] = useState('off');
 
@@ -85,9 +95,20 @@ export default function App() {
     <View style={styles.container}>
       {mediaServerStatus === 'off' && (
           <Text>The media server is currently off</Text>
-        ) && <Button title="Start Server" onPress={sendMagicPacket} />}
+        ) && (
+          <Button
+            syle={styles.startButton}
+            title="Start Server"
+            onPress={sendMagicPacket}
+          />
+        )}
+
+      {mediaServerStatus === 'on' && (
+        <Button title="Shutdown Server" onPress={shutdownServer} />
+      )}
 
       <Button title="Test SSH" onPress={pingMediaServer} />
+
       <StatusBar style="auto" />
     </View>
   );
@@ -99,5 +120,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  startButton: {
+    marginTop: 10,
   },
 });
