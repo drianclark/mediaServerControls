@@ -5,7 +5,8 @@ import {Power} from 'react-native-feather';
 
 export default function ShutdownButton(props) {
   return (
-    <View
+    <TouchableOpacity
+      onPress={props.onPress}
       style={{
         borderRadius: props.borderRadius,
         borderWidth: props.borderWidth,
@@ -16,9 +17,9 @@ export default function ShutdownButton(props) {
         alignItems: 'center',
         flex: 1,
       }}>
-      <TouchableOpacity onPress={props.onPress}>
+      <View>
         <Power stroke="white" />
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 }

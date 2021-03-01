@@ -5,7 +5,8 @@ import {RefreshCw} from 'react-native-feather';
 
 export default function RefreshButton(props) {
   return (
-    <View
+    <TouchableOpacity
+      onPress={props.onPress}
       style={{
         borderRadius: props.borderRadius,
         borderWidth: props.borderWidth,
@@ -16,9 +17,9 @@ export default function RefreshButton(props) {
         alignItems: 'center',
         flex: 1,
       }}>
-      <TouchableOpacity onPress={props.onPress}>
+      <View>
         <RefreshCw stroke="white" />
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 }

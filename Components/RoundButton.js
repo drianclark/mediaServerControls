@@ -1,25 +1,22 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 
 export default function RoundButton(props) {
+  console.log(props.style);
   return (
-    <View
-      // eslint-disable-next-line react-native/no-inline-styles
-      style={{
-        borderRadius: props.borderRadius,
-        borderWidth: props.borderWidth,
-        padding: props.padding,
-        borderColor: props.borderColor,
-        backgroundColor: props.backgroundColor,
-        marginRight: props.marginRight,
-        marginLeft: props.marginLeft,
-        flex: 1,
-      }}>
-      <TouchableOpacity onPress={props.onPress}>
-        <Text style={{color: props.color, textAlign: 'center'}}>
+    <TouchableOpacity onPress={props.onPress} style={props.style}>
+      <View>
+        <Text
+          style={{
+            color: props.fontColor,
+            fontSize: props.fontSize,
+            textAlign: 'center',
+            textAlignVertical: 'center',
+          }}>
           {props.text}
         </Text>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 }

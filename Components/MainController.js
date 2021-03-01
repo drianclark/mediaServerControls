@@ -15,6 +15,7 @@ import RoundButton from './RoundButton';
 import StartButton from './StartButton';
 import RefreshButton from './RefreshButton';
 import ShutdownButton from './ShutdownButton';
+import DownloadOptions from './DownloadOptions';
 
 const SSH_CONFIG = {
   user: Config.SSH_USER,
@@ -152,12 +153,14 @@ export default function MainController() {
             borderRadius={10}
             borderWidth={1}
             marginLeft={5}
-            onPress={sendMagicPacket}
+            onPress={shutdownServer}
           />
         )}
       </View>
 
-      <View style={styles.bottom} />
+      <View style={styles.downloadOptions}>
+        {mediaServerStatus === 'on' && <DownloadOptions />}
+      </View>
 
       <StatusBar style="auto" />
     </View>
@@ -173,7 +176,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   status: {
-    flex: 1,
+    flex: 2,
     backgroundColor: 'black',
     paddingTop: 30,
     justifyContent: 'flex-end',
@@ -195,14 +198,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   controlPanel: {
-    flex: 2,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     backgroundColor: 'black',
     borderRadius: 10,
   },
-  bottom: {
-    flex: 1,
+  downloadOptions: {
+    flex: 3,
+    // backgroundColor: 'orange',
+    borderRadius: 10,
+    paddingTop: 20,
   },
 });
