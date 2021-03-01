@@ -12,6 +12,9 @@ import dgram from 'react-native-udp';
 import SSH from 'react-native-ssh';
 import Config from 'react-native-config';
 import RoundButton from './RoundButton';
+import StartButton from './StartButton';
+import RefreshButton from './RefreshButton';
+import ShutdownButton from './ShutdownButton';
 
 const SSH_CONFIG = {
   user: Config.SSH_USER,
@@ -96,7 +99,7 @@ export default function MainController() {
 
   function refreshMediaServerStatus() {
     pingMediaServer().then((result) => {
-      console.log(Date.now(), `Refreshed: ${result}`);
+      console.log(`Refreshed: ${result.length === 0 ? 'on' : 'off'}`);
       // result === [] if there are no errors, otherwise [<the error>]
       if (result.length === 0) {
         setMediaServerStatus('on');
@@ -106,9 +109,10 @@ export default function MainController() {
     });
   }
 
+  refreshMediaServerStatus();
+
   useEffect(() => {
     var mediaServerPing = setInterval(() => {
-      console.log('refreshing status');
       refreshMediaServerStatus();
     }, 30000);
     return () => {
@@ -125,42 +129,30 @@ export default function MainController() {
       </View>
 
       <View style={styles.controlPanel}>
-        <RoundButton
-          text="Refresh"
-          borderColor="dodgerblue"
+        <RefreshButton
+          padding={30}
           borderRadius={10}
           borderWidth={1}
-          padding={40}
-          color="white"
-          backgroundColor="dodgerblue"
           marginRight={5}
           onPress={refreshMediaServerStatus}
         />
         {mediaServerStatus === 'off' && (
-          <RoundButton
-            text="Start"
-            borderColor="#64dd17"
+          <StartButton
+            padding={30}
             borderRadius={10}
             borderWidth={1}
-            padding={40}
-            color="white"
-            backgroundColor="#64dd17"
             marginLeft={5}
             onPress={sendMagicPacket}
           />
         )}
 
         {mediaServerStatus === 'on' && (
-          <RoundButton
-            text="Shutdown"
-            borderColor="#d50000"
+          <ShutdownButton
+            padding={30}
             borderRadius={10}
             borderWidth={1}
-            padding={40}
-            color="white"
-            backgroundColor="#d50000"
             marginLeft={5}
-            onPress={shutdownServer}
+            onPress={sendMagicPacket}
           />
         )}
       </View>
@@ -191,7 +183,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     alignSelf: 'stretch',
     fontFamily: 'Roboto',
-    fontSize: 20,
+    fontSize: 15,
     paddingBottom: 20,
   },
   stopButton: {
