@@ -1,21 +1,12 @@
 /* eslint-disable no-bitwise */
 import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Text, View, StatusBar} from 'react-native';
 
 import dgram from 'react-native-udp';
 import SSH from 'react-native-ssh';
 import Config from 'react-native-config';
-import RoundButton from './RoundButton';
-import StartButton from './StartButton';
-import RefreshButton from './RefreshButton';
-import ShutdownButton from './ShutdownButton';
-import DownloadOptions from './DownloadOptions';
+import PowerControls from './PowerControls';
+import DownloadControls from './DownloadControls';
 
 const SSH_CONFIG = {
   user: Config.SSH_USER,
@@ -99,6 +90,7 @@ export default function MainController() {
   const [mediaServerStatus, setMediaServerStatus] = useState('off');
 
   function refreshMediaServerStatus() {
+    console.log('refresh');
     pingMediaServer().then((result) => {
       console.log(`Refreshed: ${result.length === 0 ? 'on' : 'off'}`);
       // result === [] if there are no errors, otherwise [<the error>]
@@ -123,44 +115,26 @@ export default function MainController() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.spacer} />
       <View style={styles.status}>
         <Text style={styles.statusText}>
           The media server is currently {mediaServerStatus}
         </Text>
       </View>
 
-      <View style={styles.controlPanel}>
-        <RefreshButton
-          padding={30}
-          borderRadius={10}
-          borderWidth={1}
-          marginRight={5}
-          onPress={refreshMediaServerStatus}
+      <View style={styles.powerControls}>
+        <PowerControls
+          status={mediaServerStatus}
+          shutdownServer={shutdownServer}
+          startServer={sendMagicPacket}
+          refreshStatus={refreshMediaServerStatus}
         />
-        {mediaServerStatus === 'off' && (
-          <StartButton
-            padding={30}
-            borderRadius={10}
-            borderWidth={1}
-            marginLeft={5}
-            onPress={sendMagicPacket}
-          />
-        )}
-
-        {mediaServerStatus === 'on' && (
-          <ShutdownButton
-            padding={30}
-            borderRadius={10}
-            borderWidth={1}
-            marginLeft={5}
-            onPress={shutdownServer}
-          />
-        )}
       </View>
 
-      <View style={styles.downloadOptions}>
-        {mediaServerStatus === 'on' && <DownloadOptions />}
+      <View style={styles.downloadControls}>
+        {mediaServerStatus === 'on' && <DownloadControls />}
       </View>
+      <View style={styles.spacer} />
 
       <StatusBar style="auto" />
     </View>
@@ -176,7 +150,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   status: {
-    flex: 2,
+    flex: 1,
     backgroundColor: 'black',
     paddingTop: 30,
     justifyContent: 'flex-end',
@@ -186,8 +160,8 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     alignSelf: 'stretch',
     fontFamily: 'Roboto',
-    fontSize: 15,
-    paddingBottom: 20,
+    fontSize: 19,
+    paddingBottom: 30,
   },
   stopButton: {
     borderRadius: 10,
@@ -197,18 +171,13 @@ const styles = StyleSheet.create({
     color: 'white',
     backgroundColor: 'transparent',
   },
-  controlPanel: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    backgroundColor: 'black',
-    borderRadius: 10,
+  powerControls: {
+    flex: 2,
   },
-  downloadOptions: {
+  downloadControls: {
+    flex: 4,
+  },
+  spacer: {
     flex: 3,
-    // backgroundColor: 'orange',
-    borderRadius: 10,
-    paddingTop: 20,
   },
 });

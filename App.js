@@ -1,9 +1,6 @@
 /* eslint-disable no-bitwise */
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, Button, StatusBar} from 'react-native';
-import dgram from 'react-native-udp';
-import SSH from 'react-native-ssh';
-import Config from 'react-native-config';
+import React from 'react';
+import {StyleSheet, View, StatusBar} from 'react-native';
 import MainController from './Components/MainController';
 
 export default function App() {
